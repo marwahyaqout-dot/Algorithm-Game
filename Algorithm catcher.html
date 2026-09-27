@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>حارس الخوارزميات الذكية</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Tahoma, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top right, #344cc4 0%, transparent 35%),
+    radial-gradient(circle at bottom left, #008fa8 0%, transparent 35%),
+    linear-gradient(135deg, #091333, #22104d);
+  color: white;
+  padding: 20px;
+}
+
+.game {
+  width: 100%;
+  max-width: 950px;
+  background: rgba(7, 16, 45, 0.96);
+  border: 2px solid #61e7ff;
+  border-radius: 28px;
+  padding: 25px;
+  box-shadow:
+    0 0 15px #00cfff,
+    0 0 45px rgba(0, 207, 255, .45);
+}
+
+header {
+  text-align: center;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #416c98;
+}
+
+.logo {
+  font-size: 58px;
+  margin-bottom: 5px;
+}
+
+h1 {
+  color: #6beaff;
+  margin: 4px 0 8px;
+  font-size: clamp(25px, 5vw, 36px);
+  text-shadow: 0 0 12px #00d9ff;
+}
+
+.subtitle {
+  color: #d8eaff;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.sound-button {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 22px;
+  margin-top: 14px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0b1937;
+  background: #ffe477;
+  transition: .25s;
+}
+
+.sound-button:hover {
+  transform: scale(1.05);
+  background: #ffffff;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 22px 0 15px;
+}
+
+.badge {
+  min-width: 145px;
+  padding: 12px 18px;
+  text-align: center;
+  background: linear-gradient(135deg, #172e62, #1b4277);
+  border: 1px solid #40d9ff;
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.badge span {
+  color: #ffe477;
+  font-weight: bold;
+}
+
+.progress {
+  height: 14px;
+  background: #18294d;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 15px 0 22px;
+  border: 1px solid #315b85;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #6beaff, #9d78ff);
+  transition: width .5s ease;
+}
+
+.question {
+  background: linear-gradient(135deg, #172a57, #233f79);
+  padding: 22px;
+  border-radius: 19px;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(107, 234, 255, .5);
+}
+
+.question h2 {
+  margin: 3px 0 12px;
+  color: #ffe477;
+  font-size: 25px;
+}
+
+.question p {
+  font-size: 20px;
+  line-height: 1.9;
+  margin: 5px;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 15px;
+}
+
+.answer {
+  min-height: 70px;
+  border: 2px solid #4edfff;
+  background: #102653;
+  color: white;
+  border-radius: 15px;
+  padding: 15px;
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1.5;
+  transition: .25s;
+}
+
+.answer:hover {
+  background: #1b5b83;
+  transform: translateY(-4px);
+  box-shadow: 0 5px 16px rgba(0, 207, 255, .35);
+}
+
+.answer:active {
+  transform: scale(.97);
+}
+
+.correct {
+  background: #128a67 !important;
+  border-color: #6dffbe !important;
+  box-shadow: 0 0 18px rgba(109, 255, 190, .5);
+}
+
+.wrong {
+  background: #9d304c !important;
+  border-color: #ff8c9f !important;
+  box-shadow: 0 0 18px rgba(255, 100, 130, .45);
+}
+
+.feedback {
+  min-height: 38px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 19px;
+  font-weight: bold;
+  line-height: 1.7;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.control-button {
+  border: 0;
+  border-radius: 13px;
+  padding: 13px 27px;
+  margin: 7px 5px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  color: #07152e;
+  background: #6beaff;
+  transition: .25s;
+}
+
+.control-button:hover {
+  background: #ffe477;
+  transform: translateY(-2px);
+}
+
+.restart {
+  background: #d9b7ff;
+}
+
+.footer {
+  text-align: center;
+  color: #a8c7df;
+  margin-top: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 8px;
+  }
+
+  .game {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .question p {
+    font-size: 17px;
+  }
+
+  .answer {
+    font-size: 16px;
+  }
+
+  .badge {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+  <header>
+    <div class="logo">🤖 🛡️</div>
+
+    <h1>حارس الخوارزميات الذكية</h1>
+
+    <div class="subtitle">
+      لعبة تعليمية تفاعلية لفهم الخوارزميات والذكاء الاصطناعي
+    </div>
+
+    <button class="sound-button" id="soundBtn" onclick="toggleSound()">
+      🔊 الصوت مفعل
+    </button>
+  </header>
+
+  <div class="info">
+    <div class="badge">
+      المستوى:
+      <span id="level">1</span>
+    </div>
+
+    <div class="badge">
+      النقاط:
+      <span id="score">0</span>
+    </div>
+
+    <div class="badge">
+      السؤال:
+      <span id="number">1</span> / 8
+    </div>
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <section class="question">
+    <h2 id="questionTitle">مهمة الحارس</h2>
+    <p id="questionText"></p>
+  </section>
+
+  <div class="answers" id="answers"></div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="controls">
+    <button
+      class="control-button"
+      id="nextBtn"
+      onclick="nextQuestion()"
+      style="display:none">
+      السؤال التالي
+    </button>
+
+    <button
+      class="control-button restart"
+      onclick="restartGame()">
+      إعادة اللعب
+    </button>
+  </div>
+
+  <div class="footer">
+    نشاط تعليمي لمادة الذكاء الاصطناعي – المرحلة الثانوية<br>
+    إعداد: مروة محمد السيد ياقوت
+  </div>
+
+</div>
+
+<script>
+/* =========================
+   بيانات اللعبة
+========================= */
+
+const questions = [
+  {
+    question: "ما المقصود ببيانات الإدخال؟",
+    answers: [
+      "النتيجة النهائية",
+      "المعلومات التي يستقبلها النظام",
+      "صوت التنبيه",
+      "لون الشاشة"
+    ],
+    correct: 1
+  },
+
+  {
+    question: "ما الترتيب الصحيح لعمل النظام الذكي؟",
+    answers: [
+      "المخرجات ← الإدخال ← المعالجة",
+      "الإدخال ← المعالجة ← المخرجات",
+      "المعالجة ← المخرجات ← الإدخال",
+      "الإدخال ← المخرجات ← المعالجة"
+    ],
+    correct: 1
+  },
+
+  {
+    question: "ما وظيفة الخوارزمية؟",
+    answers: [
+      "حذف جميع البيانات",
+      "تنفيذ خطوات منظمة للوصول إلى حل",
+      "تغيير لون الجهاز",
+      "إيقاف الإنترنت"
+    ],
+    correct: 1
+  },
+
+  {
+    question: "أي مما يأتي يمثل مخرجًا لنظام ذكي؟",
+    answers: [
+      "صورة يتعرف عليها النظام",
+      "إجابة يقدمها المساعد الذكي",
+      "لوحة المفاتيح",
+      "بيانات المستخدم قبل تحليلها"
+    ],
+    correct: 1
+  },
+
+  {
+    question: "ما أفضل طريقة للتأكد من صحة إجابة الذكاء الاصطناعي؟",
+    answers: [
+      "نشرها مباشرة",
+      "التحقق منها ومقارنتها بمصادر موثوقة",
+      "حذفها",
+      "تغيير لونها"
+    ],
+    correct: 1
+  },
+
+  {
+    question: "أي كلمة مرور تعد أكثر أمانًا؟",
+    answers: [
+      "123456",
+      "password",
+      "M@rwa_2026!AI",
+      "111111"
+    ],
+    correct: 2
+  },
+
+  {
+    question: "ما التصرف الصحيح عند استقبال رسالة مشبوهة؟",
+    answers: [
+      "فتح الرابط فورًا",
+      "إرسالها إلى الأصدقاء",
+      "عدم فتحها والإبلاغ عنها",
+      "إدخال كلمة المرور"
+    ],
+    correct: 2
+  },
+
+  {
+    question: "ما الاستخدام الأخلاقي للذكاء الاصطناعي؟",
+    answers: [
+      "انتحال أعمال الآخرين",
+      "نشر بيانات شخصية",
+      "استخدامه للتعلم مع مراجعة النتائج",
+      "الغش في الاختبارات"
+    ],
+    correct: 2
+  }
+];
+
+/* =========================
+   متغيرات اللعبة
+========================= */
+
+let currentQuestion = 0;
+let score = 0;
+let locked = false;
+let soundEnabled = true;
+let audioContext = null;
+
+/* =========================
+   نظام الأصوات
+========================= */
+
+function startAudio() {
+  if (!audioContext) {
+    audioContext = new (
+      window.AudioContext ||
+      window.webkitAudioContext
+    )();
+  }
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+}
+
+function playTone(
+  frequency,
+  duration,
+  type = "sine",
+  volume = 0.08
+) {
+  if (!soundEnabled) return;
+
+  startAudio();
+
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.value = frequency;
+
+  gain.gain.setValueAtTime(
+    volume,
+    audioContext.currentTime
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioContext.currentTime + duration
+  );
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start();
+
+  oscillator.stop(
+    audioContext.currentTime + duration
+  );
+}
+
+function playClickSound() {
+  playTone(420, 0.08, "square", 0.04);
+}
+
+function playCorrectSound() {
+  playTone(600, 0.15, "sine", 0.09);
+
+  setTimeout(function() {
+    playTone(850, 0.22, "sine", 0.09);
+  }, 140);
+}
+
+function playWrongSound() {
+  playTone(180, 0.25, "sawtooth", 0.07);
+
+  setTimeout(function() {
+    playTone(120, 0.30, "sawtooth", 0.06);
+  }, 150);
+}
+
+function playVictorySound() {
+  const notes = [523, 659, 784, 1046];
+
+  notes.forEach(function(note, index) {
+    setTimeout(function() {
+      playTone(note, 0.22, "sine", 0.08);
+    }, index * 180);
+  });
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+
+  const soundButton = document.getElementById("soundBtn");
+
+  if (soundEnabled) {
+    soundButton.textContent = "🔊 الصوت مفعل";
+    soundButton.style.background = "#ffe477";
+    playClickSound();
+  } else {
+    soundButton.textContent = "🔇 الصوت متوقف";
+    soundButton.style.background = "#b7c1d6";
+  }
+}
+
+/* =========================
+   تحميل السؤال
+========================= */
+
+function loadQuestion() {
+  locked = false;
+
+  const item = questions[currentQuestion];
+
+  document.getElementById("number").textContent =
+    currentQuestion + 1;
+
+  document.getElementById("level").textContent =
+    currentQuestion < 3
+      ? 1
+      : currentQuestion < 6
+        ? 2
+        : 3;
+
+  document.getElementById("questionText").textContent =
+    item.question;
+
+  document.getElementById("feedback").textContent = "";
+
+  document.getElementById("feedback").style.color =
+    "#ffffff";
+
+  document.getElementById("nextBtn").style.display =
+    "none";
+
+  const percentage =
+    (currentQuestion / questions.length) * 100;
+
+  document.getElementById("progress").style.width =
+    percentage + "%";
+
+  const answersContainer =
+    document.getElementById("answers");
+
+  answersContainer.innerHTML = "";
+
+  item.answers.forEach(function(answer, index) {
+    const button = document.createElement("button");
+
+    button.className = "answer";
+    button.textContent = answer;
+
+    button.onclick = function() {
+      checkAnswer(button, index);
+    };
+
+    answersContainer.appendChild(button);
+  });
+}
+
+/* =========================
+   فحص الإجابة
+========================= */
+
+function checkAnswer(button, selectedIndex) {
+  startAudio();
+
+  if (locked) return;
+
+  locked = true;
+
+  const item = questions[currentQuestion];
+
+  const allAnswers =
+    document.querySelectorAll(".answer");
+
+  if (selectedIndex === item.correct) {
+    button.classList.add("correct");
+
+    playCorrectSound();
+
+    score += 10;
+
+    document.getElementById("score").textContent =
+      score;
+
+    document.getElementById("feedback").textContent =
+      "إجابة صحيحة! أحسنت، لقد حميت الخوارزمية 🛡️";
+
+    document.getElementById("feedback").style.color =
+      "#6dffbe";
+  } else {
+    button.classList.add("wrong");
+
+    allAnswers[item.correct].classList.add("correct");
+
+    playWrongSound();
+
+    document.getElementById("feedback").textContent =
+      "إجابة غير صحيحة. راجع الإجابة الصحيحة وتعلم منها.";
+
+    document.getElementById("feedback").style.color =
+      "#ff9cac";
+  }
+
+  document.getElementById("nextBtn").style.display =
+    "inline-block";
+}
+
+/* =========================
+   السؤال التالي
+========================= */
+
+function nextQuestion() {
+  playClickSound();
+
+  currentQuestion++;
+
+  if (currentQuestion >= questions.length) {
+    finishGame();
+  } else {
+    loadQuestion();
+  }
+}
+
+/* =========================
+   نهاية اللعبة
+========================= */
+
+function finishGame() {
+  playVictorySound();
+
+  document.getElementById("questionTitle").textContent =
+    "انتهت المهمة 🎉";
+
+  document.getElementById("questionText").textContent =
+    "حصلت على " + score +
+    " من " + (questions.length * 10) +
+    " نقطة.";
+
+  document.getElementById("answers").innerHTML = "";
+
+  document.getElementById("nextBtn").style.display =
+    "none";
+
+  document.getElementById("progress").style.width =
+    "100%";
+
+  const feedback =
+    document.getElementById("feedback");
+
+  feedback.style.color = "#ffe477";
+
+  if (score >= 70) {
+    feedback.textContent =
+      "ممتاز! أصبحت حارسًا محترفًا للخوارزميات الذكية 🏆";
+  } else if (score >= 40) {
+    feedback.textContent =
+      "جيد جدًا! تحتاج إلى مزيد من التدريب والتجربة.";
+  } else {
+    feedback.textContent =
+      "حاول مرة أخرى وطوّر مهاراتك الرقمية.";
+  }
+}
+
+/* =========================
+   إعادة تشغيل اللعبة
+========================= */
+
+function restartGame() {
+  startAudio();
+  playClickSound();
+
+  currentQuestion = 0;
+  score = 0;
+  locked = false;
+
+  document.getElementById("score").textContent =
+    score;
+
+  document.getElementById("questionTitle").textContent =
+    "مهمة الحارس";
+
+  loadQuestion();
+}
+
+/* تشغيل اللعبة لأول مرة */
+loadQuestion();
+</script>
+
+</body>
+</html>
